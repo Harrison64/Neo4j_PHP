@@ -1,0 +1,170 @@
+//Creando los nodos para los estudiantes
+CREATE
+  (lau {codigo:1010, nombre:'Laura', apellido:'Peña'}),
+  (man {codigo:1020, nombre:'Manuel', apellido:'Muños'}),
+  (and {codigo:1030, nombre:'Andrea', apellido:'Jarava'}),
+  (mai {codigo:1040, nombre:'Maicol', apellido:'Aguilera'})
+//Definir codigo como unico
+CREATE CONSTRAINT ON (e:Estudiante) ASSERT e.codigo IS UNIQUE
+//Codigo abligatorio
+CREATE CONSTRAINT ON (e:Estudiante) ASSERT exists(e.codigo)
+  
+//Creando los nodos para los profesores
+CREATE
+  (lui {codigo:2010, nombre:'Luis', apellido:'Arana'}),
+  (wen {codigo:2020, nombre:'Wendy', apellido:'Muños'}),
+  (rey {codigo:2030, nombre:'Reynaldo', apellido:'Martinez'}),
+  (alb {codigo:2040, nombre:'Alberto', apellido:'Vega'})
+//Definir codigo como unico
+CREATE CONSTRAINT ON (p:Profesor) ASSERT p.codigo IS UNIQUE
+//Codigo obligatorio
+CREATE CONSTRAINT ON (p:Profesor) ASSERT exists(p.codigo)
+  
+//Creando los nodos para las materias
+CREATE
+  (est{nombre:'Estadisticas',grupo:'BB'}),
+  (geo{nombre:'Geometria',grupo:'AA'}),
+  (edu{nombre:'Educacion fisica',grupo:'AC'}),
+  (fis{nombre:'Fisica',grupo:'AB'}),
+  (mat{nombre:'Matematicas',grupo:'CC'}),
+  (bio{nombre:'Biologia',grupo:'CA'}),
+  (qui{nombre:'Quimica',grupo:'BC'})
+//Definir grupo como unico
+CREATE CONSTRAINT ON (m:Materia) ASSERT m.grupo IS UNIQUE
+//Nombre de la materia y el grupo obligatorio
+CREATE CONSTRAINT ON (m:Materia) ASSERT exists(m.nombre)
+CREATE CONSTRAINT ON (m:Materia) ASSERT exists(m.grupo)
+
+  
+//Creando nodos para los cursos
+CREATE
+  (cr11{curso:11, grupo:23})
+  
+//Creando nodos para salones
+CREATE
+  (sal{nombre:'SJ11',capacidad:35})
+
+
+//Añadiendo etiquetas a los diferentes nodos (Se ejecutara linea por linea)
+
+//Estudiante
+MATCH (lau{nombre:'Laura'}) SET lau:Estudiante
+MATCH (man{nombre:'Manuel'}) SET man:Estudiante
+MATCH (and{nombre:'Andrea'}) SET and:Estudiante
+MATCH (mai{nombre:'Maicol'}) SET mai:Estudiante
+
+
+//Profesor
+MATCH (lui{nombre:'Luis'}) SET lui:Profesor
+MATCH (wen{nombre:'Wendy'}) SET wen:Profesor
+MATCH (rey{nombre:'Reynaldo'}) SET rey:Profesor
+MATCH (alb{nombre:'Alberto'}) SET alb:Profesor
+
+
+//Materia
+MATCH (est{nombre:'Estadisticas'}) SET est:Materia
+MATCH (geo{nombre:'Geometria'}) SET geo:Materia
+MATCH (edu{nombre:'Educacion fisica'}) SET edu:Materia
+MATCH (fis{nombre:'Fisica'}) SET fis:Materia
+MATCH (mat{nombre:'Matematicas'}) SET mat:Materia
+MATCH (bio{nombre:'Biologia'}) SET bio:Materia
+MATCH (qui{nombre:'Quimica'}) SET qui:Materia
+
+//Curso
+MATCH (cr11{curso:11, grupo:23}) SET cr11:Curso
+
+//Salon
+MATCH (sal{nombre:'SJ11', capacidad:35}) SET sal:Salon
+
+
+//Creando conexiones o "Relaciones" entre nodo estudiante 
+
+materia
+MATCH (e:Estudiante) WHERE e.codigo = 1010
+MATCH (m:Materia) WHERE m.nombre = 'Estadisticas'
+CREATE (e)-[:MATRICULADO{nota:3.6}]->(m)
+
+MATCH (e:Estudiante) WHERE e.codigo = 1010
+MATCH (m:Materia) WHERE m.nombre = 'Matematicas'
+CREATE (e)-[:MATRICULADO{nota:4.3}]->(m)
+
+MATCH (e:Estudiante) WHERE e.codigo = 1010
+MATCH (m:Materia) WHERE m.nombre = 'Biologia'
+CREATE (e)-[:MATRICULADO{nota:3.3}]->(m)
+
+
+MATCH (e:Estudiante) WHERE e.codigo = 1020
+MATCH (m:Materia) WHERE m.nombre = 'Estadisticas'
+CREATE (e)-[:MATRICULADO{nota:4.6}]->(m)
+
+MATCH (e:Estudiante) WHERE e.codigo = 1020
+MATCH (m:Materia) WHERE m.nombre = 'Educacion fisica'
+CREATE (e)-[:MATRICULADO{nota:3.8}]->(m)
+
+MATCH (e:Estudiante) WHERE e.codigo = 1020
+MATCH (m:Materia) WHERE m.nombre = 'Matematicas'
+CREATE (e)-[:MATRICULADO{nota:3.3}]->(m)
+
+
+MATCH (e:Estudiante) WHERE e.codigo = 1030
+MATCH (m:Materia) WHERE m.nombre = 'Geometria'
+CREATE (e)-[:MATRICULADO{nota:2.6}]->(m)
+
+MATCH (e:Estudiante) WHERE e.codigo = 1030
+MATCH (m:Materia) WHERE m.nombre = 'Fisica'
+CREATE (e)-[:MATRICULADO{nota:4.8}]->(m)
+
+MATCH (e:Estudiante) WHERE e.codigo = 1030
+MATCH (m:Materia) WHERE m.nombre = 'Matematicas'
+CREATE (e)-[:MATRICULADO{nota:5}]->(m)
+
+
+MATCH (e:Estudiante) WHERE e.codigo = 1040
+MATCH (m:Materia) WHERE m.nombre = 'Geometria'
+CREATE (e)-[:MATRICULADO{nota:3.7}]->(m)
+
+MATCH (e:Estudiante) WHERE e.codigo = 1040
+MATCH (m:Materia) WHERE m.nombre = 'Quimica'
+CREATE (e)-[:MATRICULADO{nota:2.6}]->(m)
+
+MATCH (e:Estudiante) WHERE e.codigo = 1040
+MATCH (m:Materia) WHERE m.nombre = 'Biologia'
+CREATE (e)-[:MATRICULADO{nota:3.5}]->(m)
+
+
+//Creando conexiones o "Relaciones" entre profesores y materia
+MATCH (p:Profesor) WHERE p.codigo = 2010
+MATCH (m:Materia) WHERE m.nombre = 'Estadisticas'
+CREATE (p)-[:Dicta]->(m)
+
+MATCH (p:Profesor) WHERE p.codigo = 2010
+MATCH (m:Materia) WHERE m.nombre = 'Geometria'
+CREATE (p)-[:Dicta]->(m)
+
+
+MATCH (p:Profesor) WHERE p.codigo = 2020
+MATCH (m:Materia) WHERE m.nombre = 'Educacion fisica'
+CREATE (p)-[:Dicta]->(m)
+
+
+MATCH (p:Profesor) WHERE p.codigo = 2030
+MATCH (m:Materia) WHERE m.nombre = 'Fisica'
+CREATE (p)-[:Dicta]->(m)
+
+MATCH (p:Profesor) WHERE p.codigo = 2030
+MATCH (m:Materia) WHERE m.nombre = 'Matematicas'
+CREATE (p)-[:Dicta]->(m)
+
+
+MATCH (p:Profesor) WHERE p.codigo = 2040
+MATCH (m:Materia) WHERE m.nombre = 'Biologia'
+CREATE (p)-[:Dicta]->(m)
+
+MATCH (p:Profesor) WHERE p.codigo = 2040
+MATCH (m:Materia) WHERE m.nombre = 'Quimica'
+CREATE (p)-[:Dicta]->(m)
+
+//Relacion salon curso
+MATCH (s:salon) WHERE s.nombre = 'SJ11'
+MATCH (c:Curso) WHERE c.nombre = 11
+CREATE (c)-[:Asignado]->(s)
