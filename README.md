@@ -9,7 +9,8 @@ Primero creamos el directorio el cual va a ser nuestro proyecto para establecer 
 # Conexión
 Para la conexión creamos un archivo php y digitamos lo siguiente:
 
-```<?php
+```
+<?php
 
 require_once 'vendor/autoload.php';
 
